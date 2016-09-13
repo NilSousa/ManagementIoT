@@ -9,58 +9,63 @@ import com.hazelcast.core.Cluster;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 
-public class DeviceMonitor {
-
+public class DeviceMonitor { 
+								
 	private HazelcastInstance instance = null;
 	Set<Member> listGateway = new HashSet<Member>();
-	
+
 	public void setInstance(HazelcastInstance instance) {
 		this.instance = instance;
 	}
 
 	public void deviceMonitor() {
-		Cluster cluster = instance.getCluster();
-
+		Cluster clusterInst = instance.getCluster();
+		//Set<Node> listNodes =  cluster.listNodes();	
+		
+//		for(Node n : listNodes){
+//			System.out.println("---------------------------------------");
+//			System.out.println(">>>>>>>>>>>>>>>>>>>>Node: "+n.getHost());
+//			Set<String> listGroup = group.listGroupNames(n); 
+//			for(String g : listGroup){				
+//				System.out.println(">>>>>>>>GroupsNode: "+g.toString());				
+//			}	
+//			System.out.println("---------------------------------------");
+//		}		
+		
 		try {
-			Set<Member> members = cluster.getMembers();
+			//lista capturada do cellar
+			Set<Member> members = clusterInst.getMembers();
+			//lista de gateways que caíram
 			Set<Member> membersTemp = new HashSet<Member>();
+			//gateways que surgiram
+			Set<Member> listGatewayTemp = new HashSet<Member>();
+			
 			membersTemp.addAll(members);
 
 			if (listGateway == null || listGateway.isEmpty()) {
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>Preencheu a listGateway");
+				//Preencheu a listGateway pela primeira vez
 				listGateway.addAll(members);
 			} else if (!listGateway.equals(members)) {
-
-				Set<Member> listGatewayTemp = new HashSet<Member>();
+				listGatewayTemp = new HashSet<Member>();
+				
 				listGatewayTemp.addAll(listGateway);
-
-				listGatewayTemp.removeAll(members);// retorna os gateways que
-													// cairam
-
-				membersTemp.removeAll(listGateway);// retorna os gateways novos
-													// que surgiram
-
+				//retorna os gateways que cairam
+				listGatewayTemp.removeAll(members);
+				//retorna os gateways novos que surgiram
+				membersTemp.removeAll(listGateway);
 				// atualização da lista principal
-				listGateway.addAll(membersTemp); // adiciona novos gateways
-
-				// listGateway.removeAll(listGatewayTemp); //remove gateways que
-				// sairam do sistema -- verificar
+				// adiciona novos gateways
+				listGateway.addAll(membersTemp); 
+				// retirando gateways que sairam do sistema
 				for (Member newElement : listGatewayTemp) {
 					listGateway.remove(newElement);
 				}
-				System.out.println("\n#####################################\n");
-				for (Member newElement : listGateway) {
-					System.out.println(">>>>>>>>>>Lista atualizada: " + newElement);
-				}
-				System.out.println("\n#####################################\n");
-			} else {
-				System.out.println(">>>>Gateways iguais."); // Nenhuma ação será
-															// executada
-				System.out.println("\n#####################################\n");
-				for (Member newElement : listGateway) {
-					System.out.println(">>>>>>>>>>Lista sem alteração: " + newElement);
-				}
-				System.out.println("\n#####################################\n");
+				
+				//após execução haverá
+				//listGateway -- atualizada
+				//listGatewayTemp -- com os gateways que caíram
+				//membersTemp -- com os gateways que surgiram				
+								
 			}
 		} catch (NullPointerException ex) {
 			Logger.getLogger(Example.class.getName()).log(Level.SEVERE, null, ex);

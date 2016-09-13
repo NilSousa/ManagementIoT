@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Desenvolvimento\Wiser\osgi\FoTManagement\.metadata\.plugins\org.eclipse.jdt.core
+1809429590.index

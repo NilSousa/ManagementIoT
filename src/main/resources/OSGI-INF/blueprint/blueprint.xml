@@ -11,6 +11,7 @@
 	language governing permissions and limitations under the License. -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+	xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
 	xmlns:jaxws="http://cxf.apache.org/blueprint/jaxws" xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
 	xmlns:cxf="http://cxf.apache.org/blueprint/core"
 	xsi:schemaLocation="
@@ -19,33 +20,45 @@
  http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
  http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
-    <reference id="hazelcastInstance"
-               interface="com.hazelcast.core.HazelcastInstance">
-    </reference>
-    
-<!--     <bean id="example-bla" class="br.ufba.dcc.wiser.fot.manager.Example" -->
-<!--             init-method="bla"> -->
-<!--             <property name="a" value="FoT Balance " /> -->
-<!--             <property name="b" value="+ Cellar" /> -->
-<!--             <property name="instance" ref="hazelcastInstance" /> -->
-<!--     </bean> -->
+	<reference id="hazelcastInstance" interface="com.hazelcast.core.HazelcastInstance">
+	</reference>
+	
+<!-- 	<reference id="clusterManager" interface="org.apache.karaf.cellar.core.ClusterManager"> -->
+<!-- 	</reference> -->
 
-<!-- <bean id="list" class="br.ufba.dcc.wiser.fot.balance.Exemplo"
-            init-method="bli">
-            <property name="nodeList" ref="nodeList" />
-            <property name="" value="" />
-    </bean> -->
-    
-    <bean id="device_monitor" class="br.ufba.dcc.wiser.fot.manager.DeviceMonitor"
-            init-method="deviceMonitor">            
-            <property name="instance" ref="hazelcastInstance" />
-    </bean>
-    
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint" >
-        <route>
-            <from uri="timer://myTimer?period=5000" />
-            <to uri="bean:device_monitor?method=deviceMonitor"/>
-        </route>
-    </camelContext>
+<!-- 	<reference id="groupManager" interface="org.apache.karaf.cellar.core.GroupManager"> -->
+<!-- 	</reference> -->
 
+	<!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>Área de Teste<<<<<<<<<<<<<<<<<<<<<<<< -->
+
+<!-- 	<reference id="hazelcastGroupManager" interface="org.apache.karaf.cellar.hazelcast.HazelcastGroupManager"> -->
+<!-- 	</reference> -->
+	
+<!-- 	<reference id="hazelcastClusterManager" interface="org.apache.karaf.cellar.hazelcast.HazelcastClusterManager"> -->
+<!-- 	</reference> -->
+
+<!-- 	<bean id="group_create" class="br.ufba.dcc.wiser.fot.manager.DeviceMonitor" -->
+<!-- 		init-method="createGroup"> -->
+<!-- 		<property name="hgm" ref="hazelcastGroupManager" /> -->
+<!-- 		<property name="hcm" ref="hazelcastClusterManager" /> -->
+<!-- 	</bean> -->
+
+	<!-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>Área de Teste<<<<<<<<<<<<<<<<<<<<<<<< -->
+
+	<bean id="device_monitor" class="br.ufba.dcc.wiser.fot.manager.DeviceMonitor"
+		init-method="deviceMonitor">
+		<property name="instance" ref="hazelcastInstance" />
+<!-- 		<property name="clusterM" ref="clusterManager" /> -->
+<!-- 		<property name="group" ref="groupManager" /> -->
+	</bean>
+
+	
+
+	<camelContext id="camel"
+		xmlns="http://camel.apache.org/schema/blueprint">
+		<route>
+			<from uri="timer://myTimer?period=5000" />
+			<to uri="bean:device_monitor?method=deviceMonitor" />
+		</route>
+	</camelContext>
 </blueprint>

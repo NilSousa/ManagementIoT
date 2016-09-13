@@ -2,6 +2,9 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Desenvolvimento\Wiser\osgi\FoTManagement"/>
+			<item value="C:\Users\Nilson\Desktop\wiser\ManagementIoT"/>
+			<item value="C:\Desenvolvimento\Wiser\osgi"/>
 			<item value="C:\Desenvolvimento\Wiser\osgi\FoTBalanceManagement"/>
 		</list>
 		<list key="projectNameTemplate">
